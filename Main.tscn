@@ -1,0 +1,163 @@
+[gd_scene load_steps=4 format=3 uid="uid://bj4yj60x1v8sq"]
+
+[ext_resource type="Script" uid="uid://gb44fckwc4ti" path="res://GameManager.gd" id="1_1x2a1"]
+[ext_resource type="Script" uid="uid://b1ocs41mdafyl" path="res://EnemySpawner.gd" id="2_3t4r5"]
+[ext_resource type="Script" uid="uid://dkd4eua6f5l4y" path="res://HUD.gd" id="3_4u7v0"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_1x2a1")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(576, 326)
+
+[node name="EnemySpawner" type="Node" parent="."]
+script = ExtResource("2_3t4r5")
+
+[node name="HUD" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_4u7v0")
+
+[node name="GameUI" type="HBoxContainer" parent="HUD"]
+custom_minimum_size = Vector2(750, 80)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 149.0
+offset_top = 549.0
+offset_right = 929.0
+offset_bottom = 639.0
+grow_vertical = 0
+
+[node name="GameUIBackground" type="ColorRect" parent="HUD/GameUI"]
+z_index = -1
+layout_mode = 2
+color = Color(0.2, 0.2, 0.2, 0.8)
+
+[node name="StatsGroup" type="VBoxContainer" parent="HUD/GameUI"]
+custom_minimum_size = Vector2(150, 80)
+layout_mode = 2
+
+[node name="GoldLabel" type="Label" parent="HUD/GameUI/StatsGroup"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Gold: 100"
+
+[node name="LivesLabel" type="Label" parent="HUD/GameUI/StatsGroup"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Lives: 10"
+
+[node name="WaveLabel" type="Label" parent="HUD/GameUI/StatsGroup"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Wave: 1/5"
+
+[node name="Spacer1" type="Control" parent="HUD/GameUI"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="ButtonGroup" type="VBoxContainer" parent="HUD/GameUI"]
+custom_minimum_size = Vector2(120, 80)
+layout_mode = 2
+
+[node name="StartWaveButton" type="Button" parent="HUD/GameUI/ButtonGroup"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Start Wave"
+
+[node name="ExitButton" type="Button" parent="HUD/GameUI/ButtonGroup"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Exit Game"
+
+[node name="Spacer2" type="Control" parent="HUD/GameUI"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="StatusGroup" type="VBoxContainer" parent="HUD/GameUI"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+
+[node name="GameStatusLabel" type="Label" parent="HUD/GameUI/StatusGroup"]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "STATUS"
+horizontal_alignment = 1
+
+[node name="Instructions" type="VBoxContainer" parent="HUD"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = 863.0
+offset_top = 18.0
+offset_right = 1143.0
+offset_bottom = 398.0
+grow_horizontal = 0
+
+[node name="InstructionsBackground" type="ColorRect" parent="HUD/Instructions"]
+z_index = -1
+layout_mode = 2
+color = Color(0.1, 0.1, 0.1, 0.9)
+
+[node name="InstructionsTitle" type="Label" parent="HUD/Instructions"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "INSTRUCTIONS"
+
+[node name="Instruction1" type="Label" parent="HUD/Instructions"]
+layout_mode = 2
+text = "• Left-click gray tiles to place towers (50 gold)"
+autowrap_mode = 3
+
+[node name="Instruction2" type="Label" parent="HUD/Instructions"]
+layout_mode = 2
+text = "• Click 'Start Wave' to spawn enemies"
+autowrap_mode = 3
+
+[node name="Instruction3" type="Label" parent="HUD/Instructions"]
+layout_mode = 2
+text = "• Survive 5 waves to win"
+autowrap_mode = 3
+
+[node name="Instruction4" type="Label" parent="HUD/Instructions"]
+layout_mode = 2
+text = "• Enemies get stronger each wave"
+autowrap_mode = 3
+
+[node name="Instruction5" type="Label" parent="HUD/Instructions"]
+layout_mode = 2
+text = "• More enemies spawn each wave"
+autowrap_mode = 3
+
+[node name="Instruction6" type="Label" parent="HUD/Instructions"]
+layout_mode = 2
+text = "• Towers auto-attack enemies in range"
+autowrap_mode = 3
+
+[node name="Instruction7" type="Label" parent="HUD/Instructions"]
+layout_mode = 2
+text = "• Kill enemies to earn gold"
+autowrap_mode = 3
+
+[node name="DebugTitle" type="Label" parent="HUD/Instructions"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "DEBUG KEYS"
+
+[node name="Debug1" type="Label" parent="HUD/Instructions"]
+layout_mode = 2
+text = "• K - Kill all enemies"
+autowrap_mode = 3
+
+[node name="Debug2" type="Label" parent="HUD/Instructions"]
+layout_mode = 2
+text = "• R - Restart game"
+autowrap_mode = 3
