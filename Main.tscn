@@ -147,6 +147,16 @@ layout_mode = 2
 text = "• Kill enemies to earn gold"
 autowrap_mode = 3
 
+[node name="Instruction8" type="Label" parent="HUD/Instructions"]
+layout_mode = 2
+text = "• Interest earned at wave end (10%)"
+autowrap_mode = 3
+
+[node name="Instruction9" type="Label" parent="HUD/Instructions"]
+layout_mode = 2
+text = "• Click towers to upgrade damage/speed"
+autowrap_mode = 3
+
 [node name="DebugTitle" type="Label" parent="HUD/Instructions"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16

@@ -18,10 +18,14 @@ var lives = 10
 var current_wave = 1
 var max_waves = 5
 
+# Interest system variables
+var interest_rate = 0.10  # Flat 10% interest rate
+
 var grid = []
 var path_waypoints = []
 var enemies = []
 var towers = []
+var selected_tower = null
 
 @onready var hud = $HUD
 @onready var enemy_spawner = $EnemySpawner
@@ -126,6 +130,28 @@ func handle_click(pos: Vector2):
 	if current_state == GameState.GAME_OVER:
 		return
 
+	# Check if upgrade menu is visible and click is within it
+	if hud.upgrade_menu and hud.upgrade_menu.visible:
+		var upgrade_rect = Rect2(hud.upgrade_menu.global_position, hud.upgrade_menu.size)
+		if upgrade_rect.has_point(pos):
+			print("DEBUG: Click in upgrade menu area, not processing as game click")
+			return
+
+	# Check if clicking on a tower first
+	var clicked_tower = get_tower_at_position(pos)
+	print("DEBUG: Clicked at ", pos, ", found tower: ", clicked_tower != null)
+	if clicked_tower:
+		print("DEBUG: Selecting tower")
+		select_tower(clicked_tower)
+		return
+
+	# If no tower clicked, deselect any selected tower
+	if selected_tower:
+		selected_tower.deselect()
+		selected_tower = null
+		hud.hide_upgrade_menu()
+
+	# Handle tile placement
 	var grid_pos = iso_to_grid(pos)
 	var grid_x = grid_pos.x
 	var grid_y = grid_pos.y
@@ -161,6 +187,14 @@ func on_enemy_death(enemy):
 
 	if enemies.is_empty() and current_state == GameState.WAVE:
 		current_state = GameState.BUILD
+
+		# Apply interest at the end of each wave
+		var interest_earned = calculate_interest(gold)
+		if interest_earned > 0:
+			gold += interest_earned
+			hud.update_gold(gold)
+			print("Interest earned: ", interest_earned, " gold! New total: ", gold)
+
 		current_wave += 1
 
 		if current_wave > max_waves:
@@ -180,6 +214,14 @@ func on_enemy_exit(enemy):
 		hud.show_game_over()
 	elif enemies.is_empty() and current_state == GameState.WAVE:
 		current_state = GameState.BUILD
+
+		# Apply interest at the end of each wave
+		var interest_earned = calculate_interest(gold)
+		if interest_earned > 0:
+			gold += interest_earned
+			hud.update_gold(gold)
+			print("Interest earned: ", interest_earned, " gold! New total: ", gold)
+
 		current_wave += 1
 
 		if current_wave > max_waves:
@@ -211,6 +253,51 @@ func kill_all_enemies():
 func restart_game():
 	print("DEBUG: Restarting game")
 	get_tree().reload_current_scene()
+
+# Interest system functions
+func calculate_interest(current_gold: int) -> int:
+	var interest_earned = int(current_gold * interest_rate)
+	return interest_earned
+
+func get_current_interest_rate() -> float:
+	return interest_rate
+
+# Tower management functions
+func get_tower_at_position(pos: Vector2):
+	for tower in towers:
+		if tower.can_be_clicked(pos):
+			return tower
+	return null
+
+func select_tower(tower):
+	print("DEBUG: GameManager select_tower called")
+	# Deselect previous tower
+	if selected_tower:
+		selected_tower.deselect()
+
+	# Select new tower
+	selected_tower = tower
+	tower.select()
+	print("DEBUG: Calling hud.show_upgrade_menu")
+	hud.show_upgrade_menu(tower)
+
+func upgrade_selected_tower_damage():
+	print("DEBUG: GameManager upgrade_selected_tower_damage called")
+	if selected_tower:
+		print("DEBUG: Selected tower exists, calling upgrade_damage")
+		if selected_tower.upgrade_damage():
+			hud.update_upgrade_menu(selected_tower)
+	else:
+		print("DEBUG: No selected tower!")
+
+func upgrade_selected_tower_speed():
+	print("DEBUG: GameManager upgrade_selected_tower_speed called")
+	if selected_tower:
+		print("DEBUG: Selected tower exists, calling upgrade_speed")
+		if selected_tower.upgrade_speed():
+			hud.update_upgrade_menu(selected_tower)
+	else:
+		print("DEBUG: No selected tower!")
 
 func _process(_delta):
 	queue_redraw()
